@@ -2,6 +2,9 @@ import loadApi from './utils/loaders/loadApi';
 
 class Api {
     constructor () {
+        if (typeof window === "undefined") {
+            return;
+        }
         this.api = window.ymaps ? window.ymaps : null;
     }
 
@@ -15,7 +18,7 @@ class Api {
         return this.api;
     }
 
-    isAvailible () {
+    isAvailable () {
         return Boolean(this.api);
     }
 

@@ -80,7 +80,7 @@ class YandexMap extends Component {
     }
 
     componentDidMount () {
-        if (api.isAvailible()) {
+        if (api.isAvailable()) {
             this._onAPILoad(api.getAPI());
         } else {
             api.load(this._getAPIParams())
