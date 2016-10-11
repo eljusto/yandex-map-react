@@ -57,7 +57,7 @@ function createLayout ({domElement, extendMethods = {}}) {
         },
 
         _getSize: function () {
-            const element = this.getElement().querySelector('.icon-content');
+            const element = this.getElement().querySelector('.icon-content') || this.getElement();
             return [element.offsetWidth, element.offsetHeight];
         }
     }, extendMethods));
