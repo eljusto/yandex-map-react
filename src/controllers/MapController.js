@@ -30,6 +30,10 @@ class MapController {
         this._map.setCenter(coords);
     }
 
+    setBounds (bounds) {
+        this._map.setBounds(bounds);
+    }
+
     setZoom (zoom) {
         this._map.setZoom(zoom);
     }
