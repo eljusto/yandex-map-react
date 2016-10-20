@@ -21,7 +21,6 @@ class YandexMap extends Component {
 
     static defaultProps = {
         zoom: 10,
-        center: [55, 45],
         width: 600,
         height: 600,
         state: {
@@ -61,9 +60,20 @@ class YandexMap extends Component {
                     this._controller.setState(key, nextProps[key]);
                     break;
                 case 'center':
-                    if (this.props.center[0] !== nextProps.center[0]
+                    if (!this.props.center
+                      || this.props.center[0] !== nextProps.center[0]
                       || this.props.center[1] !== nextProps.center[1] ) {
                       this._controller.setCenter(nextProps.center);
+                    }
+
+                    break;
+                case 'bounds':
+                    if (!this.props.bounds
+                      || this.props.bounds[0][0] !== nextProps.bounds[0][0]
+                      || this.props.bounds[0][1] !== nextProps.bounds[0][1]
+                      || this.props.bounds[1][0] !== nextProps.bounds[1][0]
+                      || this.props.bounds[1][1] !== nextProps.bounds[1][1] ) {
+                      this._controller.setBounds(nextProps.bounds);
                     }
 
                     break;
@@ -125,7 +135,10 @@ class YandexMap extends Component {
             {
                 ...this.props.state,
                 center: this.props.center,
-                zoom: this.props.zoom
+                bounds: this.props.bounds,
+                zoom: this.props.zoom,
+                minZoom: this.props.minZoom,
+                maxZoom: this.props.maxZoom
             },
             {...this.props.options}
         );
