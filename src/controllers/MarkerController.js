@@ -16,7 +16,7 @@ class MarkerController {
     constructor (coordinates, properties = {}, options = {}, balloonState) {
         this.options = options;
         this.properties = properties;
-        this.baloonState = baloonState;
+        this.balloonState = balloonState;
         this._coordinates = coordinates;
         this._marker = new (api.getAPI()).Placemark(coordinates, null, null);
         this._setupMarkerProperties();
