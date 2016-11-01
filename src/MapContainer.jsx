@@ -11,6 +11,7 @@ class YandexMap extends Component {
     static propTypes = {
         apiKey: PropTypes.string,
         onAPIAvailable: PropTypes.func,
+        fitToViewport: PropTypes.bool,
         width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         zoom: PropTypes.number,
@@ -99,6 +100,12 @@ class YandexMap extends Component {
         }
     }
 
+    componentDidUpdate () {
+        if (this.props.fitToViewport) {
+            this._controller.fitToViewport();
+        }
+    }
+
     render () {
         return (
             <div style={this._getStyle()}>
@@ -148,6 +155,9 @@ class YandexMap extends Component {
 
         if (this.props.onMapAvailable) {
             this.props.onMapAvailable(this._controller.map);
+        }
+        if (this.props.fitToViewport) {
+            this._controller.fitToViewport();
         }
     }
 }

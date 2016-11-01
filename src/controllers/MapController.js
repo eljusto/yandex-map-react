@@ -19,6 +19,10 @@ class MapController {
         marker.setBalloonState(marker.balloonState);
     }
 
+    fitToViewport() {
+        this._map.container.fitToViewport();
+    }
+
     get map () {
         return this._map;
     }
