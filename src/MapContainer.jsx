@@ -102,7 +102,7 @@ class YandexMap extends Component {
 
     componentDidUpdate () {
         if (this.props.fitToViewport) {
-            this._controller.fitToViewport();
+            this._controller && this._controller.fitToViewport();
         }
     }
 
