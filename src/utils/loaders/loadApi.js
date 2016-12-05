@@ -3,7 +3,7 @@ import {apiConfig} from '../../configs';
 
 let loadPromise;
 
-const enabledAPIParams = ['lang', 'apikey', 'coordorder', 'load', 'mode'];
+const enabledAPIParams = ['lang', 'apikey', 'coordorder', 'load', 'mode', 'csp'];
 const successCallbackName = '_$_api_success';
 const errorCallbackName = '_$_api_error';
 

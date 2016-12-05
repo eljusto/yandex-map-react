@@ -9,14 +9,20 @@ import api from './api';
 
 class YandexMap extends Component {
     static propTypes = {
-        apiKey: PropTypes.string,
         onAPIAvailable: PropTypes.func,
         fitToViewport: PropTypes.bool,
         width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         zoom: PropTypes.number,
         state: PropTypes.object,
-        coordorder: PropTypes.oneOf(['latlong', 'longlat']),
+        style: PropTypes.object,
+        mapStyle: PropTypes.object,
+        apiParams: PropTypes.shape({
+            apiKey: PropTypes.string,
+            coordorder: PropTypes.oneOf(['latlong', 'longlat']),
+            mode: PropTypes.oneOf(['debug', 'release']),
+            load: PropTypes.string
+        }),
         options: PropTypes.object
     }
 
@@ -109,20 +115,14 @@ class YandexMap extends Component {
     render () {
         return (
             <div style={this._getStyle()}>
-                <MapElement ref="mapContainer" />
+                <MapElement ref="mapContainer" style={this.props.mapStyle} />
                 {Boolean(this.state.isAPILoaded) ? this.props.children : null}
             </div>
         );
     }
 
     _getAPIParams () {
-        const params = {}
-
-        if (this.props.coordorder) {
-            params.coordorder = this.props.coordorder;
-        }
-
-        return params;
+        return this.props.apiParams || {};
     }
 
     _getStyle () {

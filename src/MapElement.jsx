@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const style = {
+const defaultStyle = {
     position: 'absolute',
     width: '100%',
     height: '100%',
@@ -19,7 +19,8 @@ class MapElement extends Component {
 
     render () {
         return (
-            <div style={style}></div>
+            <div style={this.props.style || defaultStyle }></div>
+
         );
     }
 }
