@@ -98,6 +98,9 @@ class MapMarker extends Component {
 
     _setupBalloonLayout (component) {
         this._balloonElement = document.createElement('div');
+        this._balloonElement.className = 'balloon-content';
+        this._balloonElement.style.display = 'inline-block';
+        this._balloonElement.style.position = 'absolute';
 
         ReactDOM.render(component, this._balloonElement);
         this._controller.setLayout('balloonLayout', this._balloonElement);

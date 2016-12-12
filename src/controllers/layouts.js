@@ -47,18 +47,56 @@ function createLayout ({domElement, extendMethods = {}}) {
             this.events.fire('shapechange');
         },
 
+        /**
+         * Сдвигаем балун, чтобы "хвостик" указывал на точку привязки.
+         * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/IBalloonLayout.xml#event-userclose
+         * @function
+         * @name applyElementOffset
+         */
+        applyElementOffset: function () {
+            const content = this._getContent();
+            if (content) {
+                content.style.left = -(content.offsetWidth / 2) + 'px';
+                content.style.top= -(content.offsetHeight) + 'px';
+            }
+        },
+
+        _getContent: function() {
+            return this.getElement();
+        },
+
+        onSublayoutSizeChange: function () {
+            LayoutClass.superclass.onSublayoutSizeChange.apply(this, arguments);
+
+            const content = this._getContent();
+            if(!content) {
+                return;
+            }
+
+            this._updateSize();
+
+            this.events.fire('shapechange');
+        },
+
         _setupContent: function (domElement) {
             const element = this.getElement();
             element.appendChild(domElement);
         },
 
         _updateSize: function () {
-            this._size = this._getSize();
+            const newSize = this._getSize();
+            if (newSize) {
+                this._size = newSize;
+            }
+            this.applyElementOffset();
         },
 
         _getSize: function () {
-            const element = this.getElement().querySelector('.icon-content') || this.getElement();
-            return [element.offsetWidth, element.offsetHeight];
+            const content = this._getContent();
+            if(!content) {
+                return null;
+            }
+            return [content.offsetWidth, content.offsetHeight];
         }
     }, extendMethods));
 
@@ -70,11 +108,22 @@ export default {
         return createLayout({
             domElement,
             extendMethods: {
+
+                _getContent: function () {
+                    const element = this.getElement();
+                    if (element) {
+                        return element.querySelector('.icon-content');
+                    }
+                },
+
                 _updateSize: function () {
                     let geoObject;
                     const oldSize = this._size;
+                    const newSize = this._getSize();
 
-                    this._size = this._getSize();
+                    if (newSize) {
+                        this._size = newSize;
+                    }
 
                     // Update layout offset.
                     if (!oldSize || (oldSize[0] !== this._size[0] || oldSize[1] !== this._size[1])) {
@@ -94,6 +143,18 @@ export default {
     },
 
     createBalloonLayoutClass: function (domElement) {
-        return createLayout({domElement});
+        return createLayout({
+            domElement,
+            extendMethods: {
+
+                _getContent: function () {
+                    const element = this.getElement();
+                    if (element) {
+                        return element.querySelector('.balloon-content');
+                    }
+                }
+            }
+
+        });
     }
 };
