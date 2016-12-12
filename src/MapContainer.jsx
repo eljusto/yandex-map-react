@@ -48,6 +48,12 @@ class YandexMap extends Component {
         this.state = {
             isAPILoaded: false
         };
+
+        this._getMapElementRef = this._getMapElementRef.bind(this);
+    }
+
+    _getMapElementRef(ref) {
+        this.mapElement = ref;
     }
 
     getChildContext () {
@@ -115,7 +121,7 @@ class YandexMap extends Component {
     render () {
         return (
             <div style={this._getStyle()}>
-                <MapElement ref="mapContainer" style={this.props.mapStyle} />
+                <MapElement ref={ this._getMapElementRef } style={this.props.mapStyle} />
                 {Boolean(this.state.isAPILoaded) ? this.props.children : null}
             </div>
         );
@@ -138,7 +144,7 @@ class YandexMap extends Component {
 
         this._controller = new MapController();
         this._controller.createMap(
-            ReactDOM.findDOMNode(this.refs.mapContainer),
+            ReactDOM.findDOMNode(this.mapElement),
             {
                 ...this.props.state,
                 center: this.props.center,
