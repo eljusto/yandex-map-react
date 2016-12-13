@@ -147,6 +147,27 @@ export default {
             domElement,
             extendMethods: {
 
+                getShape: function getShape() {
+                    const content = this._getContent();
+                    var rect;
+                    if (content) {
+                        rect = [
+                            [content.offsetLeft, content.offsetTop],
+                            [content.offsetLeft + content.offsetWidth, content.offsetTop + content.offsetHeight]
+                        ];
+                    } else {
+                        let size = this._size || [0, 0];
+                        rect = [
+                            [0, 0],
+                            [size[0], size[1]]
+                        ];
+                    }
+
+                    return new (api.getAPI()).shape.Rectangle(
+                        new (api.getAPI()).geometry.pixel.Rectangle(rect)
+                    );
+                },
+
                 _getContent: function () {
                     const element = this.getElement();
                     if (element) {
