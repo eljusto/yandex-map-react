@@ -17,6 +17,8 @@ class YandexMap extends Component {
         state: PropTypes.object,
         style: PropTypes.object,
         mapStyle: PropTypes.object,
+        useClusterer: PropTypes.bool,
+        clustererOptions: PropTypes.object,
         apiParams: PropTypes.shape({
             apiKey: PropTypes.string,
             coordorder: PropTypes.oneOf(['latlong', 'longlat']),
@@ -33,6 +35,8 @@ class YandexMap extends Component {
         state: {
             controls: []
         },
+        useClusterer: false,
+        clustererOptions: {},
         options: {},
         style: {
             position: 'relative'
@@ -153,7 +157,9 @@ class YandexMap extends Component {
                 minZoom: this.props.minZoom,
                 maxZoom: this.props.maxZoom
             },
-            {...this.props.options}
+            {...this.props.options},
+            this.props.useClusterer,
+            this.props.clustererOptions
         );
 
         this._setupEvents();

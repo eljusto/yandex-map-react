@@ -5,8 +5,11 @@ class MapController {
 
     }
 
-    createMap (container, state, options) {
+    createMap (container, state, options, useClusterer, clustererOptions) {
         this._map = new (api.getAPI()).Map(container, state, options);
+        if (useClusterer) {
+            this._clusterer = new (api.getAPI()).Clusterer(clustererOptions);
+        }
         this.events = this._map.events.group();
 
         this._setupCollection();
@@ -15,8 +18,13 @@ class MapController {
     }
 
     appendMarker (marker) {
-        this._geoCollection.add(marker.getAPIInstance());
-        marker.setBalloonState(marker.balloonState);
+        if (this._clusterer) {
+            this._clusterer.add(marker.getAPIInstance());
+            marker.setClusterBalloonState(marker.balloonState, this._clusterer);
+        } else {
+            this._geoCollection.add(marker.getAPIInstance());
+            marker.setBalloonState(marker.balloonState);
+        }
     }
 
     fitToViewport() {
@@ -54,7 +62,11 @@ class MapController {
 
     _setupCollection () {
         this._geoCollection = new (api.getAPI()).GeoObjectCollection();
-        this._map.geoObjects.add(this._geoCollection);
+        if (this._clusterer) {
+            this._map.geoObjects.add(this._clusterer);
+        } else {
+            this._map.geoObjects.add(this._geoCollection);
+        }
     }
 }
 

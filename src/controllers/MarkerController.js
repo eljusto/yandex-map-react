@@ -65,6 +65,22 @@ class MarkerController {
         }
     }
 
+    setClusterBalloonState(state, clusterer) {
+        if (state === 'opened') {
+            const geoObjectState = clusterer.getObjectState(this._marker);
+            if (geoObjectState.isShown) {
+                if (geoObjectState.isClustered) {
+                    geoObjectState.cluster.state.set('activeObject', this._marker);
+                    clusterer.balloon.open(geoObjectState.cluster);
+                } else {
+                    this.setBalloonState(state);
+                }
+            }
+        } else {
+            this.setBalloonState(state);
+        }
+    }
+
     /**
      *
      * @param {String} name
@@ -88,6 +104,13 @@ class MarkerController {
     destroy () {
         this.events.removeAll();
         this._marker.setParent(null);
+        this._marker = null;
+    }
+
+
+    destroyOnClusterer(clusterer) {
+        this.events.removeAll();
+        clusterer.remove(this._marker);
         this._marker = null;
     }
 

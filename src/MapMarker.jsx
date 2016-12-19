@@ -48,7 +48,11 @@ class MapMarker extends Component {
             }
         });
 
-        this._controller.setBalloonState(balloonState);
+        if (this.context.mapController._clusterer) {
+            this._controller.setClusterBalloonState(balloonState, this.context.mapController._clusterer);
+        } else {
+            this._controller.setBalloonState(balloonState);
+        }
 
         if (children != prevProps.children) {
             this._clearLayouts();
@@ -68,7 +72,11 @@ class MapMarker extends Component {
 
     componentWillUnmount () {
         this._clearLayouts();
-        this._controller.destroy();
+        if (this.context.mapController._clusterer) {
+            this._controller.destroyOnClusterer(this.context.mapController._clusterer);
+        } else {
+            this._controller.destroy();
+        }
     }
 
     getController () {
