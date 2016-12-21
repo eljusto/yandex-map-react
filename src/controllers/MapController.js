@@ -8,6 +8,12 @@ class MapController {
     createMap (container, state, options, useClusterer, clustererOptions) {
         this._map = new (api.getAPI()).Map(container, state, options);
         if (useClusterer) {
+            clustererOptions = clustererOptions || {};
+            if (clustererOptions.clustererBalloonTemplate) {
+                const tmplFactory = (api.getAPI()).templateLayoutFactory;
+                clustererOptions.clusterBalloonContentLayout = tmplFactory.createClass(clustererOptions.clustererBalloonTemplate);
+                delete clustererOptions.clustererBalloonTemplate;
+            }
             this._clusterer = new (api.getAPI()).Clusterer(clustererOptions);
         }
         this.events = this._map.events.group();
