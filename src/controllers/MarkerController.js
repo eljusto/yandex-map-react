@@ -11,12 +11,10 @@ class MarkerController {
      * @param  {Object} properties
      * @param  {Object} options
      * @param  {HTMLElement} options.markerDOM Marker layout
-     * @param  {string} balloonState - 'opened' or 'closed'
      */
-    constructor (coordinates, properties = {}, options = {}, balloonState) {
+    constructor (coordinates, properties = {}, options = {}) {
         this.options = options;
         this.properties = properties;
-        this.balloonState = balloonState;
         this._coordinates = coordinates;
         this._marker = new (api.getAPI()).Placemark(coordinates, null, null);
         this._setupMarkerProperties();
@@ -51,37 +49,6 @@ class MarkerController {
     }
 
     /**
-     * @param {string} state - 'opened' or 'closed'
-     */
-    setBalloonState(state) {
-        if (state === 'opened') {
-            if (!this._marker.balloon.isOpen()) {
-                this._marker.balloon.open();
-            }
-        } else {
-            if (this._marker.balloon.isOpen()) {
-                this._marker.balloon.close();
-            }
-        }
-    }
-
-    setClusterBalloonState(state, clusterer) {
-        if (state === 'opened') {
-            const geoObjectState = clusterer.getObjectState(this._marker);
-            if (geoObjectState.isShown) {
-                if (geoObjectState.isClustered) {
-                    geoObjectState.cluster.state.set('activeObject', this._marker);
-                    clusterer.balloon.open(geoObjectState.cluster);
-                } else {
-                    this.setBalloonState(state);
-                }
-            }
-        } else {
-            this.setBalloonState(state);
-        }
-    }
-
-    /**
      *
      * @param {String} name
      * @param {HTMLElement} element
@@ -107,23 +74,16 @@ class MarkerController {
         this._marker = null;
     }
 
-
-    destroyOnClusterer(clusterer) {
-        this.events.removeAll();
-        clusterer.remove(this._marker);
-        this._marker = null;
-    }
-
     _setupMarkerProperties () {
         const {properties} = this;
-        Object.keys(properties).forEach(propName => {
+        Object.keys(properties).forEach((propName) => {
             this.setProperty(propName, properties[propName]);
         });
     }
 
     _setupMarkerOptions () {
         const {options} = this;
-        Object.keys(options).forEach(optName => {
+        Object.keys(options).forEach((optName) => {
             this.setOption(optName, options[optName]);
         });
     }

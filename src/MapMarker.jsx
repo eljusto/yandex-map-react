@@ -12,16 +12,13 @@ class MapMarker extends Component {
         lat: PropTypes.number.isRequired,
         lon: PropTypes.number.isRequired,
         properties: PropTypes.object,
-        options: PropTypes.object,
-        balloonState: PropTypes.oneOf(['opened', 'closed'])
-    }
-
-    static defaultProps = {
-        balloonState: 'closed'
+        options: PropTypes.object
     }
 
     static contextTypes = {
-        mapController: PropTypes.object
+        mapController: PropTypes.object,
+        cluster: PropTypes.bool,
+        clusterController: PropTypes.object,
     }
 
     constructor (props) {
@@ -30,7 +27,7 @@ class MapMarker extends Component {
     }
 
     componentDidUpdate (prevProps) {
-        const {lat, lon, children, properties, options, balloonState} = this.props;
+        const {lat, lon, children, properties, options} = this.props;
 
         if (lat !== prevProps.lat || lon !== prevProps.lon) {
             this._controller.setPosition([lat, lon]);
@@ -48,12 +45,6 @@ class MapMarker extends Component {
             }
         });
 
-        if (this.context.mapController._clusterer) {
-            this._controller.setClusterBalloonState(balloonState, this.context.mapController._clusterer);
-        } else {
-            this._controller.setBalloonState(balloonState);
-        }
-
         if (children != prevProps.children) {
             this._clearLayouts();
             this._setupLayouts();
@@ -61,22 +52,28 @@ class MapMarker extends Component {
     }
 
     componentDidMount () {
-        const {lat, lon, properties, options, balloonState} = this.props;
+        const {lat, lon, properties, options} = this.props;
 
-        this._controller = new MarkerController([lat, lon], properties, options, balloonState);
+        this._controller = new MarkerController([lat, lon], properties, options);
         this._setupLayouts();
         this._setupEvents();
 
-        this.context.mapController.appendMarker(this._controller);
+        if (this.context.cluster) {
+            this.context.clusterController.appendMarker(this._controller);
+        } else {
+            this.context.mapController.appendMarker(this._controller);
+        }
+
     }
 
     componentWillUnmount () {
         this._clearLayouts();
-        if (this.context.mapController._clusterer) {
-            this._controller.destroyOnClusterer(this.context.mapController._clusterer);
-        } else {
-            this._controller.destroy();
+
+        if (this.context.cluster) {
+            this.context.clusterController.destroyMarker(this._controller);
         }
+
+        this._controller.destroy();
     }
 
     getController () {

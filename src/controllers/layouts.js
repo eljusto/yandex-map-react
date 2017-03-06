@@ -49,7 +49,7 @@ function createLayout ({domElement, extendMethods = {}}) {
 
         /**
          * Сдвигаем балун, чтобы "хвостик" указывал на точку привязки.
-         * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/IBalloonLayout.xml#event-userclose
+         * @see https://api.yandex.ru/maps/doc/jsapi/2.1/ref/reference/IBalloonLayout.xml
          * @function
          * @name applyElementOffset
          */
@@ -57,7 +57,7 @@ function createLayout ({domElement, extendMethods = {}}) {
             const content = this._getContent();
             if (content) {
                 content.style.left = -(content.offsetWidth / 2) + 'px';
-                content.style.top= -(content.offsetHeight) + 'px';
+                content.style.top = -(content.offsetHeight) + 'px';
             }
         },
 
@@ -69,7 +69,7 @@ function createLayout ({domElement, extendMethods = {}}) {
             LayoutClass.superclass.onSublayoutSizeChange.apply(this, arguments);
 
             const content = this._getContent();
-            if(!content) {
+            if (!content) {
                 return;
             }
 
@@ -93,7 +93,7 @@ function createLayout ({domElement, extendMethods = {}}) {
 
         _getSize: function () {
             const content = this._getContent();
-            if(!content) {
+            if (!content) {
                 return null;
             }
             return [content.offsetWidth, content.offsetHeight];
@@ -149,14 +149,14 @@ export default {
 
                 getShape: function getShape() {
                     const content = this._getContent();
-                    var rect;
+                    let rect;
                     if (content) {
                         rect = [
                             [content.offsetLeft, content.offsetTop],
                             [content.offsetLeft + content.offsetWidth, content.offsetTop + content.offsetHeight]
                         ];
                     } else {
-                        let size = this._size || [0, 0];
+                        const size = this._size || [0, 0];
                         rect = [
                             [0, 0],
                             [size[0], size[1]]
