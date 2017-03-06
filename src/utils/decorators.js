@@ -6,7 +6,7 @@ export function eventsDecorator (Component, {supportEvents}) {
         configurable: true,
         writable: true,
         value() {
-            registerEvents(this.getController(), this.props, supportEvents);
+            registerEvents(this.getController().getAPIInstance(), this.props, supportEvents);
         }
     });
 

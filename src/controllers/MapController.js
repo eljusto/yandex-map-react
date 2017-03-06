@@ -5,40 +5,34 @@ class MapController {
 
     }
 
-    createMap (container, state, options, useClusterer, clustererOptions) {
+    createMap (container, state, options) {
         this._map = new (api.getAPI()).Map(container, state, options);
-        if (useClusterer) {
-            clustererOptions = clustererOptions || {};
-            if (clustererOptions.clustererBalloonTemplate) {
-                const tmplFactory = (api.getAPI()).templateLayoutFactory;
-                clustererOptions.clusterBalloonContentLayout = tmplFactory.createClass(clustererOptions.clustererBalloonTemplate);
-                delete clustererOptions.clustererBalloonTemplate;
-            }
-            this._clusterer = new (api.getAPI()).Clusterer(clustererOptions);
-        }
+        this._map.events.add('click', () =>
+            this._map.balloon.close()
+        );
         this.events = this._map.events.group();
-
         this._setupCollection();
-
         return this;
     }
 
     appendMarker (marker) {
-        if (this._clusterer) {
-            this._clusterer.add(marker.getAPIInstance());
-            marker.setClusterBalloonState(marker.balloonState, this._clusterer);
-        } else {
-            this._geoCollection.add(marker.getAPIInstance());
-            marker.setBalloonState(marker.balloonState);
-        }
+        this._geoCollection.add(marker.getAPIInstance());
+    }
+
+    appendCluster (cluster) {
+        this._geoCollection.add(cluster);
     }
 
     fitToViewport() {
         this._map.container.fitToViewport();
     }
 
-    get map () {
+    getAPIInstance () {
         return this._map;
+    }
+
+    get map () {
+        return this.getAPIInstance();
     }
 
     setOptions (name, value) {
@@ -68,11 +62,7 @@ class MapController {
 
     _setupCollection () {
         this._geoCollection = new (api.getAPI()).GeoObjectCollection();
-        if (this._clusterer) {
-            this._map.geoObjects.add(this._clusterer);
-        } else {
-            this._map.geoObjects.add(this._geoCollection);
-        }
+        this._map.geoObjects.add(this._geoCollection);
     }
 }
 

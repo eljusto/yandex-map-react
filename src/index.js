@@ -2,6 +2,7 @@ import Map from './MapContainer';
 import Marker from './MapMarker';
 import MarkerLayout from './MarkerLayout';
 import BalloonLayout from './BalloonLayout';
+import Cluster from './Cluster';
 import ConstructorJSONImport from './ConstructorJSONImport';
 
 // auto-polyfill Promise
@@ -12,4 +13,6 @@ export {
     Marker,
     MarkerLayout,
     BalloonLayout,
-    ConstructorJSONImport};
+    Cluster,
+    ConstructorJSONImport
+};

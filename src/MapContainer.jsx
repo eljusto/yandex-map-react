@@ -4,7 +4,6 @@ import MapElement from './MapElement';
 import MapController from './controllers/MapController';
 import supportEvents from './apiEventsLists/map';
 import {eventsDecorator} from './utils/decorators';
-import config from './configs';
 import api from './api';
 
 class YandexMap extends Component {
@@ -17,8 +16,6 @@ class YandexMap extends Component {
         state: PropTypes.object,
         style: PropTypes.object,
         mapStyle: PropTypes.object,
-        useClusterer: PropTypes.bool,
-        clustererOptions: PropTypes.object,
         apiParams: PropTypes.shape({
             apiKey: PropTypes.string,
             coordorder: PropTypes.oneOf(['latlong', 'longlat']),
@@ -35,8 +32,6 @@ class YandexMap extends Component {
         state: {
             controls: []
         },
-        useClusterer: false,
-        clustererOptions: {},
         options: {},
         style: {
             position: 'relative'
@@ -157,9 +152,7 @@ class YandexMap extends Component {
                 minZoom: this.props.minZoom,
                 maxZoom: this.props.maxZoom
             },
-            {...this.props.options},
-            this.props.useClusterer,
-            this.props.clustererOptions
+            {...this.props.options}
         );
 
         this._setupEvents();
