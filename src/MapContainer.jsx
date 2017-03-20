@@ -67,7 +67,7 @@ class YandexMap extends Component {
 
     componentWillReceiveProps (nextProps) {
         Object.keys(nextProps).forEach(key => {
-            if (typeof nextProps[key] !== 'undefined') {
+            if (typeof nextProps[key] === 'undefined') {
                 return;
             }
 
