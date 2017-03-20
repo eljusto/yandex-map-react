@@ -67,6 +67,10 @@ class YandexMap extends Component {
 
     componentWillReceiveProps (nextProps) {
         Object.keys(nextProps).forEach(key => {
+            if (typeof nextProps[key] !== 'undefined') {
+                return;
+            }
+
             switch (key) {
                 case 'controls':
                     this._controller.setState(key, nextProps[key]);
@@ -144,15 +148,8 @@ class YandexMap extends Component {
         this._controller = new MapController();
         this._controller.createMap(
             ReactDOM.findDOMNode(this.mapElement),
-            {
-                ...this.props.state,
-                center: this.props.center,
-                bounds: this.props.bounds,
-                zoom: this.props.zoom,
-                minZoom: this.props.minZoom,
-                maxZoom: this.props.maxZoom
-            },
-            {...this.props.options}
+            { ...this.props.state },
+            { ...this.props.options }
         );
 
         this._setupEvents();
