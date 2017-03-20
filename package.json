@@ -1,6 +1,6 @@
 {
   "name": "yandex-map-react",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Yandex map react",
   "main": "lib/index.js",
   "scripts": {
